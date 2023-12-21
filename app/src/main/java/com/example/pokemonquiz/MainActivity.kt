@@ -27,8 +27,8 @@ import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
 
-    private var pokemonIds: List<Int> = getRandomNumbers()
-    private var index = mutableIntStateOf(0)
+    private var pokemonPageIndices: List<Int> = getRandomIndices()
+    private var orderIndex = mutableIntStateOf(0)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.End
+                            horizontalArrangement = Arrangement.SpaceBetween
                         ) {
 
                             Button(onClick = {
@@ -53,22 +53,23 @@ class MainActivity : ComponentActivity() {
                             }) {
                                 Text(text = "Restart")
                             }
-                            Spacer(modifier = Modifier.size(10.dp))
-                            Button(onClick = { finish() }) {
-                                Text(text = "Close")
+                            Button(onClick = {
+                                startActivity(
+                                    PokemonWebView.createIntent(
+                                        this@MainActivity,
+                                        pageViewIndex = pokemonPageIndices[orderIndex.value]
+                                    )
+                                )
+                            }) {
+                                Text(text = "Answer")
                             }
                         }
                         Text(
-                            text = "Quiz ${index.value + 1}: No.${
-                                String.format(
-                                    "%04d",
-                                    pokemonIds[index.value]
-                                )
-                            }",
+                            text = "Quiz ${orderIndex.value + 1}",
                             fontSize = 30.sp
                         )
                         AsyncImage(
-                            model = String.format(POKEMON_IMAGE_URL, pokemonIds[index.value]),
+                            model = PokemonData.getImageUrl(pokemonPageIndices[orderIndex.value]),
                             contentDescription = null,
                             modifier = Modifier
                                 .fillMaxSize()
@@ -81,8 +82,8 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun init() {
-        index.value = 0
-        pokemonIds = getRandomNumbers()
+        orderIndex.value = 0
+        pokemonPageIndices = getRandomIndices()
     }
 
     private fun restart() {
@@ -91,7 +92,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun next(skipAlert: Boolean = false) {
-        if (index.value >= TOTAL_COUNT - 1) {
+        if (orderIndex.value >= TOTAL_COUNT - 1) {
             if (!skipAlert) {
                 AlertDialog.Builder(this)
                     .setTitle("Pokemon Quiz")
@@ -101,26 +102,22 @@ class MainActivity : ComponentActivity() {
             }
             return
         }
-        index.value++
+        orderIndex.value++
     }
 
-    private fun getRandomNumbers(): List<Int> {
-        val numbers = mutableListOf<Int>()
+    private fun getRandomIndices(): List<Int> {
+        val indices = mutableListOf<Int>()
         val random = Random(System.currentTimeMillis())
-        while (numbers.size < TOTAL_COUNT) {
-            val number = random.nextInt(START_ID, END_ID + 1)
-            if (!numbers.contains(number)) {
-                numbers.add(number)
+        while (indices.size < TOTAL_COUNT) {
+            val index = random.nextInt(0, PokemonData.MAX_PAGE_VIEW_INDEX + 1)
+            if (!indices.contains(index)) {
+                indices.add(index)
             }
         }
-        return numbers
+        return indices
     }
 
     companion object {
-        private const val START_ID = 1
-        private const val END_ID = 1010
         private const val TOTAL_COUNT = 50
-        private const val POKEMON_IMAGE_URL =
-            "https://data1.pokemonkorea.co.kr/newdata/pokedex/mid/%04d01.png"
     }
 }
