@@ -49,8 +49,7 @@ class MainActivity : ComponentActivity() {
                         ) {
 
                             Button(onClick = {
-                                next(skipAlert = true)
-                                init()
+                                restart()
                             }) {
                                 Text(text = "Restart")
                             }
@@ -86,13 +85,18 @@ class MainActivity : ComponentActivity() {
         pokemonIds = getRandomNumbers()
     }
 
+    private fun restart() {
+        next(skipAlert = true)
+        init()
+    }
+
     private fun next(skipAlert: Boolean = false) {
         if (index.value >= TOTAL_COUNT - 1) {
             if (!skipAlert) {
                 AlertDialog.Builder(this)
                     .setTitle("Pokemon Quiz")
                     .setMessage("Game over!")
-                    .setPositiveButton(android.R.string.ok) { _, _ -> finish() }
+                    .setPositiveButton("Restart") { _, _ -> restart() }
                     .show()
             }
             return
