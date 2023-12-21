@@ -88,7 +88,7 @@ class MainActivity : ComponentActivity() {
 
     private fun next(skipAlert: Boolean = false) {
         if (index.value >= TOTAL_COUNT - 1) {
-            if (skipAlert) {
+            if (!skipAlert) {
                 AlertDialog.Builder(this)
                     .setTitle("Pokemon Quiz")
                     .setMessage("Game over!")
@@ -102,8 +102,9 @@ class MainActivity : ComponentActivity() {
 
     private fun getRandomNumbers(): List<Int> {
         val numbers = mutableListOf<Int>()
+        val random = Random(System.currentTimeMillis())
         while (numbers.size < TOTAL_COUNT) {
-            val number = Random.nextInt(START_ID, END_ID + 1)
+            val number = random.nextInt(START_ID, END_ID + 1)
             if (!numbers.contains(number)) {
                 numbers.add(number)
             }
