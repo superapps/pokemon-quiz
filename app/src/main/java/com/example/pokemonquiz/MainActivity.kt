@@ -69,7 +69,7 @@ class MainActivity : ComponentActivity() {
                             fontSize = 30.sp
                         )
                         AsyncImage(
-                            model = String.format(POKETMON_IMAGE_URL, pokemonIds[index.value]),
+                            model = String.format(POKEMON_IMAGE_URL, pokemonIds[index.value]),
                             contentDescription = null,
                             modifier = Modifier
                                 .fillMaxSize()
@@ -115,7 +115,7 @@ class MainActivity : ComponentActivity() {
         private const val START_ID = 1
         private const val END_ID = 1010
         private const val TOTAL_COUNT = 50
-        private const val POKETMON_IMAGE_URL =
+        private const val POKEMON_IMAGE_URL =
             "https://data1.pokemonkorea.co.kr/newdata/pokedex/mid/%04d01.png"
     }
 }
