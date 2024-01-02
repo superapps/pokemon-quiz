@@ -90,7 +90,8 @@ class MainActivity : ComponentActivity() {
                         ) {
                             AsyncImage(
                                 model = PokemonData.getImageUrl(pokemonPageIndices[orderIndex.value]),
-                                contentDescription = null
+                                contentDescription = null,
+                                modifier = Modifier.fillMaxSize()
                             )
                             Box(
                                 modifier = getBlindBoxModifier()
