@@ -82,7 +82,7 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                         Text(
-                            text = "Quiz ${orderIndex.value + 1}",
+                            text = "Quiz ${orderIndex.value + 1} / $TOTAL_COUNT",
                             fontSize = 30.sp
                         )
                         Box(
@@ -96,6 +96,12 @@ class MainActivity : ComponentActivity() {
                             Box(
                                 modifier = getBlindBoxModifier()
                             )
+                            Row(
+                                modifier = Modifier.fillMaxSize(),
+                            ) {
+                                Box(modifier = Modifier.fillMaxSize().weight(1f).clickable { prev() })
+                                Box(modifier = Modifier.fillMaxSize().weight(1f).clickable { next() })
+                            }
                         }
                     }
                 }
@@ -126,6 +132,13 @@ class MainActivity : ComponentActivity() {
             return
         }
         orderIndex.value++
+    }
+
+    private fun prev() {
+        if (orderIndex.value == 0) {
+            return
+        }
+        orderIndex.value--
     }
 
     private fun getRandomIndices(): List<Int> {
